@@ -1,50 +1,111 @@
 # StudyNest
 
-## Installation und Ausführung
+StudyNest is a full-stack web application developed as part of a university Web Engineering module.  
+The project demonstrates a clean separation between frontend and backend, modern tooling, and practical authentication and data handling using Firebase.
 
-### 1. Erstellen Sie einen Ordner: 
-erstellen Sie einen neuen Ordner, wo Sie das Repository lokal klonen möchten
+---
 
-### 2. öffnen Sie den Terminal mit dem Pfad des Ordners
+## Tech Stack
 
-### 3. Projekt-Repository klonen
-Führen Sie den folgenden Befehl aus, um das Repository zu klonen:
-git clone https://gitlab.cs.hs-rm.de/aoe-web-engineering/wintersemester-24-25-projekte/gruppe-5/studynest.git
+### Frontend
 
-### 4. Projekt mit Visual Studio Code öffnen
-Öffnen Sie Visual Studio Code.
-Gehen Sie zu Datei → Ordner öffnen.
-Wählen Sie den zuvor geklonten Projektordner aus
+- Next.js
+- React
+- TypeScript
+- Tailwind CSS
+- Vitest
 
-### 5. Terminal in Visual Studio Code öffnen
-Öffnen Sie ein neues Terminal in Visual Studio Code mit:
-Windows/Linux: Strg + Shift + ö
-Mac: Cmd + Shift + ö
-### 6. Abhängigkeiten installieren
-folgende Befehle im Terminal eingeben: 
+### Backend
 
-- cd studynest/backend 
-- npm install
-- nodemon server.js
-neuen Terminal öffnen:
-- cd studynest/frontend   
-- npm install  
-- npm run dev  
+- Node.js
+- Express
+- Firebase Admin SDK
+- Firestore
 
-- API Keys: Alle benötigten API-Keys sind bereits in das Projekt integriert.
+---
 
-### Bedienungsanleitung 
-Sie können entweder einen neuen Account erstellen, oder Sie verwenden diesen Account, womit wir unsere Funktionalitäten getestet haben.
-- mail: study1nest@gmail.com
-- passwort:test123456
+## Project Structure
 
-### Support
-Falls Sie Unterstützung benötigen, wenden Sie sich bitte an:
-- Entwickler: Mabchour Oussama 
-- E-Mail: oussama.mabchour@student.hs-rm.de
--
-- Entwickler: Misic Ivan 
-- E-Mail: Ivan.Misic@student.hs-rm.de
--
-- Entwickler: Sakah Houssam
-- E-Mail: Houssam.Sakah@student.hs-rm.de
+```
+studynest/
+├── frontend/   # Next.js frontend application
+├── backend/    # Node.js / Express backend
+```
+
+Both frontend and backend are independent npm projects and must be installed separately.
+
+---
+
+## Installation & Local Development
+
+### Prerequisites
+
+- Node.js (version 18–20 recommended)
+- npm
+
+---
+
+### 1. Clone the repository
+
+```bash
+git clone <REPOSITORY_URL>
+cd studynest
+```
+
+---
+
+### 2. Start the backend
+
+```bash
+cd backend
+npm install
+npm start
+```
+
+The backend will run on:
+
+```
+http://localhost:4000
+```
+
+---
+
+### 3. Start the frontend (new terminal)
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+The frontend will be available at:
+
+```
+http://localhost:3000
+```
+
+---
+
+## Authentication & Configuration
+
+This project uses Firebase for authentication and data storage.
+
+Sensitive configuration files (e.g. Firebase service account credentials) are intentionally **not included** in this repository.  
+To run the backend with full functionality, a valid Firebase Admin configuration must be provided locally.
+
+---
+
+## Security Note
+
+`npm audit` may report moderate vulnerabilities in dev-only dependencies (e.g. Vite, Vitest).  
+These do **not** affect production builds.
+
+The Vitest API server is explicitly disabled to mitigate known RCE vectors during development.
+
+---
+
+## Authors
+
+- Houssam Sakah
+- Ivan Misic
+- Oussama Mabchour
