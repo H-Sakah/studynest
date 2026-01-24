@@ -2,13 +2,13 @@ import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 const firebaseConfig = {
-  apiKey: 'AIzaSyCg-5KbC-MwAerYVDpPvSm9A8Nd1oeKSqs',
-  authDomain: 'studynest-8373b.firebaseapp.com',
-  projectId: 'studynest-8373b',
-  storageBucket: 'studynest-8373b.firebasestorage.app',
-  messagingSenderId: '241731938919',
-  appId: '1:241731938919:web:a82cf34261d5d0bf2a82c2',
-  measurementId: 'G-9Y86TDR0LD',
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY!,
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN!,
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID!,
+  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET!,
+  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID!,
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID!,
+  measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID!,
 };
 
 // Initialize Firebase
