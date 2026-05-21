@@ -5,6 +5,34 @@ The project represents a student platform and demonstrates a clean separation be
 
 ---
 
+## Preview
+
+### Login Page
+
+![Login Page](./frontend/public/screenshots/login-page.png)
+
+### Dashboard
+
+![Dashboard](./frontend/public/screenshots/dashboard1.png)
+![Dashboard](./frontend/public/screenshots/dashboard2.png)
+
+### Meine-Module
+
+![Meine-Module](./frontend/public/screenshots/meine-module.png)
+
+### Task Board
+
+![Task Board](./frontend/public/screenshots/tasks1.png)
+![Task Board](./frontend/public/screenshots/tasks2.png)
+
+### Schedule Integration
+
+![Schedule](./frontend/public/screenshots/stundenplan.png)
+
+### Platforms Section
+
+![Platforms](./frontend/public/screenshots/platforms.png)
+
 ## Tech Stack
 
 ### Frontend
