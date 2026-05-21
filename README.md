@@ -1,7 +1,10 @@
 # StudyNest
 
-StudyNest is a full-stack web application developed as part of a university Web Engineering module.  
-The project represents a student platform and demonstrates a clean separation between frontend and backend, modern tooling, authentication, and data handling using Firebase.
+StudyNest is a full-stack web application developed as part of a university Web Engineering module.
+
+The project represents a student platform and demonstrates modern tooling, authentication, data handling, and a clear separation between frontend and backend.
+
+The original project included an Express backend. For the deployed portfolio version, authentication and data handling are implemented with Firebase client-side services.
 
 ---
 
