@@ -103,7 +103,8 @@ export default function Home() {
     fetchModulesAndTasks();
   }, [userId]);
 
-  useEffect(() => {
+  // same as dashboard index.tsx
+  /* useEffect(() => {
     const fetchUserData = async () => {
       try {
         const response = await fetch('http://localhost:4000/api/getUser', {
@@ -117,6 +118,36 @@ export default function Home() {
         setUserData(data.user);
       } catch (error) {
         console.error('Fehler beim Laden der Benutzerdaten:', error);
+      }
+    };
+
+    fetchUserData();
+  }, []); */
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      const { getAuth } = await import('firebase/auth');
+      const { doc, getDoc } = await import('firebase/firestore');
+      const { db } = await import('../../firebase/config');
+
+      const auth = getAuth();
+      const currentUser = auth.currentUser;
+
+      if (!currentUser) {
+        window.location.href = '/login';
+        return;
+      }
+
+      const userDoc = await getDoc(doc(db, 'users', currentUser.uid));
+
+      if (userDoc.exists()) {
+        setUserData(
+          userDoc.data() as {
+            firstName: string;
+            lastName: string;
+            email: string;
+          }
+        );
       }
     };
 
