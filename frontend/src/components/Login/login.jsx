@@ -13,21 +13,21 @@ const LoginForm = () => {
   const [error, setError] = useState(null);
   const router = useRouter();
 
- const handleLogin = async (e) => {
-   e.preventDefault();
-   setError(null);
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setError(null);
 
-   try {
-     // Login bei Firebase
-     const userCredential = await signInWithEmailAndPassword(
-       auth,
-       email,
-       password
-     );
-     const user = userCredential.user;
+    try {
+      // Login bei Firebase
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      const user = userCredential.user;
 
-     // Token abrufen
-     const token = await user.getIdToken();
+      // Token abrufen
+      /* const token = await user.getIdToken();
 
      // Token an das Backend senden
      await fetch('http://localhost:4000/api/session-login', {
@@ -37,20 +37,19 @@ const LoginForm = () => {
        },
        credentials: 'include', // Cookies vom Server akzeptieren
        body: JSON.stringify({ token }),
-     });
+     }); */
 
-     // Weiterleitung zum Dashboard
-     router.push('/dashboard');
-   } catch (err) {
-     console.error('Login-Fehler:', err.message);
-     if (err.code === 'auth/user-not-found') {
-       setError('Benutzer nicht gefunden. Bitte registriere dich zuerst.');
-     } else {
-       setError('Falsches Passwort. Bitte versuche es erneut.');
-     }
-   }
- };
-
+      // Weiterleitung zum Dashboard
+      router.push('/dashboard');
+    } catch (err) {
+      console.error('Login-Fehler:', err.message);
+      if (err.code === 'auth/user-not-found') {
+        setError('Benutzer nicht gefunden. Bitte registriere dich zuerst.');
+      } else {
+        setError('Falsches Passwort. Bitte versuche es erneut.');
+      }
+    }
+  };
 
   const togglePasswordVisibility = () => {
     setShowPassword((prev) => !prev);

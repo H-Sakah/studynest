@@ -8,6 +8,8 @@ import {
 } from 'firebase/auth';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import { doc, setDoc } from 'firebase/firestore';
+import { db } from '../../firebase/config';
 
 const SignUp = () => {
   const [email, setEmail] = useState('');
@@ -40,7 +42,7 @@ const SignUp = () => {
       // E-Mail-Verifizierung senden
       await sendEmailVerification(user);
 
-      // ID-Token abrufen
+      /* // ID-Token abrufen
       const token = await user.getIdToken();
 
       // Benutzerdaten an das Backend senden
@@ -55,9 +57,14 @@ const SignUp = () => {
 
       if (!response.ok) {
         throw new Error('Fehler beim Speichern der Benutzerdaten im Backend');
-      }
+      } */
 
-      
+      await setDoc(doc(db, 'users', user.uid), {
+        firstName,
+        lastName,
+        email,
+      });
+
       router.push('/sign-up/erfolgreich');
     } catch (err) {
       console.error('Registrierungsfehler:', err);
