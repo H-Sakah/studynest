@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react';
-import { Sidebar } from '../components/Sidebar/sidebar';
-import { Schedule } from '../components/Schedule/schedule';
-import { UploadSchedule } from '../components/Schedule/uploadSchedule';
+import { Sidebar } from './Sidebar/sidebar';
+import { Schedule } from './Schedule/schedule';
+import { UploadSchedule } from './Schedule/uploadSchedule';
 import { useSchedule } from '../hooks/useSchedule';
-
 
 export type LayoutProps = {
   children: React.ReactNode;
@@ -25,7 +24,6 @@ export const Layout = ({ children, userId, userData }: LayoutProps) => {
     handleFileUpload,
     handleDeleteSchedule,
   } = useSchedule(userId);
-
 
   return (
     <div className="flex ">
@@ -53,8 +51,7 @@ export const Layout = ({ children, userId, userData }: LayoutProps) => {
       </div>
 
       {/* Schedule */}
-      <div className="mr-10"
-      >
+      <div className="mr-10">
         {isLoadingSchedule ? (
           <div className="text-center text-gray-500">
             Veranstaltungsplan wird geladen...

@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { NameProvider } from '../../components/User/nameContext';
 import { KanbanBoard } from '../../components/Tasks/kanbanBoard';
 import { Header } from '../../components/Header/header';
-import { Layout } from '../Layout';
+import { Layout } from '../../components/Layout';
 import { getModules } from '../../firebase/firebaseModulesService';
 import {
   getTasks,

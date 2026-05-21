@@ -8,6 +8,20 @@ import {
   setDoc,
 } from 'firebase/firestore';
 
+export type Module = {
+  id: string;
+  title: string;
+  tasksCount: number;
+  progress: number;
+  color?: string;
+  tasks?: unknown[];
+  activeTasks?: unknown[];
+  details: {
+    lecturers: string[];
+    deadlines: { name: string; date: string }[];
+  };
+};
+
 // Funktion zum Abrufen der Nutzer-spezifischen Module
 const getUserModulesCollection = (userId: string) =>
   collection(db, `users/${userId}/modules`);
@@ -47,12 +61,15 @@ export const editModule = async (
   return await setDoc(moduleDoc, updatedModule, { merge: true });
 };
 
-
 // Module abrufen
-export const getModules = async (userId: string) => {
+export const getModules = async (userId: string): Promise<Module[]> => {
   const modulesCollection = getUserModulesCollection(userId);
   const snapshot = await getDocs(modulesCollection);
-  return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+
+  return snapshot.docs.map((doc) => ({
+    id: doc.id,
+    ...(doc.data() as Omit<Module, 'id'>),
+  }));
 };
 
 // Modul löschen

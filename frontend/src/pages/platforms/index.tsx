@@ -7,10 +7,9 @@ import {
   deleteLink,
 } from '../../firebase/firebaseLinksService';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
-import { Layout } from '../Layout';
+import { Layout } from '../../components/Layout';
 import { Header } from '../../components/Header/header';
 import { LinkGrid } from '../../components/Platforms/linkGrid';
-
 
 interface UserData {
   firstName: string;
@@ -31,7 +30,6 @@ export default function Home() {
   const [userId, setUserId] = useState<string | null>(null);
   const [isLoadingLinks, setIsLoadingLinks] = useState(true);
 
-  
   // Benutzer-ID abrufen und Links laden
   useEffect(() => {
     const auth = getAuth();
@@ -41,7 +39,12 @@ export default function Home() {
         const uid = currentUser.uid;
         setUserId(uid);
 
-        const fetchedLinks = await getLinks(uid) as { id: string; title: string; link: string; src?: string }[];
+        const fetchedLinks = (await getLinks(uid)) as {
+          id: string;
+          title: string;
+          link: string;
+          src?: string;
+        }[];
         setLinks(fetchedLinks);
       } else {
         setUserId(null);
@@ -62,9 +65,9 @@ export default function Home() {
           credentials: 'include',
         });
 
-         if (!response.ok) {
-           window.location.href = '/login';
-         }
+        if (!response.ok) {
+          window.location.href = '/login';
+        }
 
         const data = await response.json();
         setUserData(data.user);
@@ -75,8 +78,6 @@ export default function Home() {
 
     fetchUserData();
   }, []);
-
- 
 
   // Link hinzufügen
   const handleAddLink = async (newLink: {
@@ -96,30 +97,30 @@ export default function Home() {
     setLinks((prevLinks) => prevLinks.filter((link) => link.id !== id));
   };
 
-   return (
-     <NameProvider value={userData}>
-       <Layout userId={userId} userData={userData}>
-         {isLoadingLinks ? (
-           <div className="text-center text-gray-500">
-             Links werden geladen...
-           </div>
-         ) : (
-          <div className='flex mb-10'>
-           <div className="transition-all duration-300 flex-grow p-4">
-             <Header
-               addButtonTitle="neuer Link"
-               addFunctionOnClick={() => setIsPopupOpen(true)}
-             />
-             <LinkGrid data={links} onRemove={handleRemoveLink} />
-           </div>
-           </div>
-         )}
-         <AddModulePopup
-           isOpen={isPopupOpen}
-           onClose={() => setIsPopupOpen(false)}
-           onSave={handleAddLink}
-         />
-       </Layout>
-     </NameProvider>
-   );
+  return (
+    <NameProvider value={userData}>
+      <Layout userId={userId} userData={userData}>
+        {isLoadingLinks ? (
+          <div className="text-center text-gray-500">
+            Links werden geladen...
+          </div>
+        ) : (
+          <div className="flex mb-10">
+            <div className="transition-all duration-300 flex-grow p-4">
+              <Header
+                addButtonTitle="neuer Link"
+                addFunctionOnClick={() => setIsPopupOpen(true)}
+              />
+              <LinkGrid data={links} onRemove={handleRemoveLink} />
+            </div>
+          </div>
+        )}
+        <AddModulePopup
+          isOpen={isPopupOpen}
+          onClose={() => setIsPopupOpen(false)}
+          onSave={handleAddLink}
+        />
+      </Layout>
+    </NameProvider>
+  );
 }

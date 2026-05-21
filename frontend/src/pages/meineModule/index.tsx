@@ -1,17 +1,15 @@
-
 import { Header } from '../../components/Header/header';
 import { NameProvider } from '../../components/User/nameContext';
 import { useEffect, useState } from 'react';
 import { Modal } from '../../components/Modal/modal';
 import { ModuleCardList } from '../../components/Dashboard/moduleCardList';
-import { Layout } from '../Layout';
+import { Layout } from '../../components/Layout';
 import {
   addModule,
   getModules,
   deleteModule,
   editModule,
 } from '../../firebase/firebaseModulesService';
-
 
 import { getTasks } from '../../firebase/firebaseTasksService';
 import { Task } from '../../components/Tasks/types';
@@ -57,7 +55,6 @@ export default function Home() {
   }>({ name: '', date: '' });
   const [deadlineError, setDeadlineError] = useState<string>('');
 
-
   const allColors = [
     'bg-yellow-300',
     'bg-cyan-400',
@@ -73,27 +70,27 @@ export default function Home() {
     (color) => !usedColors.includes(color)
   );
 
-
   useEffect(() => {
     const fetchModulesAndTasks = async () => {
       if (!userId) return;
       try {
-       
         const firebaseModules = await getModules(userId);
 
-        
         const firebaseTasks = await getTasks(userId);
-        const activeTasks = firebaseTasks.filter((task) => task.columnId !== 'done');
+        const activeTasks = firebaseTasks.filter(
+          (task) => task.columnId !== 'done'
+        );
 
         const modulesWithTasks = firebaseModules.map((mod) => {
           const filteredTasks = firebaseTasks.filter(
-          
             (task) => task.moduleTitle === mod.title
           );
           return {
             ...mod,
             tasks: filteredTasks,
-            activeTasks: activeTasks.filter((task) => task.moduleTitle === mod.title),
+            activeTasks: activeTasks.filter(
+              (task) => task.moduleTitle === mod.title
+            ),
           };
         });
 
@@ -105,7 +102,6 @@ export default function Home() {
 
     fetchModulesAndTasks();
   }, [userId]);
-
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -146,15 +142,12 @@ export default function Home() {
     initializeAuth();
   }, []);
 
-
   const handleSaveModule = async (e: React.FormEvent) => {
     e.preventDefault();
 
-   
     if (!moduleName.trim() || !userId || !moduleColor) return;
 
-   
-    const updatedModuleData: Omit<Module, 'id'> = {
+    const updatedModuleData = {
       title: moduleName,
       tasksCount: moduleToEdit?.tasksCount ?? 0,
       progress: moduleToEdit?.progress ?? 0,
@@ -167,21 +160,18 @@ export default function Home() {
 
     try {
       if (isEditMode && moduleToEdit) {
- 
         await editModule(userId, moduleToEdit.id!, updatedModuleData);
 
-    
         setModules((prevModules) =>
           prevModules.map((m) =>
             m.id === moduleToEdit.id ? { ...m, ...updatedModuleData } : m
           )
         );
       } else {
- 
         const docRef = await addModule(userId, updatedModuleData);
         setModules((prev) => [
           ...prev,
-          { id: docRef.id, ...updatedModuleData },
+          { id: docRef.id, ...updatedModuleData, tasks: [], activeTasks: [] },
         ]);
       }
 
@@ -191,19 +181,20 @@ export default function Home() {
     }
   };
 
-
   const handleAddDeadline = () => {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     const deadlineDate = new Date(newDeadline.date);
     deadlineDate.setHours(0, 0, 0, 0);
-  
+
     if (deadlineDate < today) {
       // If the date is in the past, set the error message
-      setDeadlineError('Das Datum der Frist darf nicht in der Vergangenheit liegen.');
+      setDeadlineError(
+        'Das Datum der Frist darf nicht in der Vergangenheit liegen.'
+      );
       return;
     }
-  
+
     // Clear the error message and add the deadline
     setDeadlineError('');
     if (newDeadline.name.trim() && newDeadline.date.trim()) {
@@ -211,13 +202,13 @@ export default function Home() {
       setNewDeadline({ name: '', date: '' });
     }
   };
-  
+
   const handleDeleteLecturer = (index: number) => {
-    setLecturers((prevLecturers) => 
+    setLecturers((prevLecturers) =>
       prevLecturers.filter((_, i) => i !== index)
     );
   };
-  
+
   const handleDeleteDeadline = (index: number) => {
     setDeadlines((prevDeadlines) =>
       prevDeadlines.filter((_, i) => i !== index)
@@ -227,20 +218,19 @@ export default function Home() {
   const handleOpenEditModal = (mod: Module) => {
     setIsEditMode(true);
     setModuleToEdit(mod);
-  
+
     setModuleName(mod.title);
     setLecturers([...mod.details.lecturers]);
     setDeadlines([...mod.details.deadlines]);
     setModuleColor(mod.color || 'bg-gray-300');
-  
-   
+
     setIsCreateModalOpen(true);
   };
 
   const openDeleteModal = (id: string) => {
     setModuleToDelete(id);
     setIsDeleteModalOpen(true);
-  }
+  };
 
   const confirmDeleteModule = async () => {
     if (!moduleToDelete || !userId) return;
@@ -326,19 +316,19 @@ export default function Home() {
                       }}
                       className="flex items-center text-blue-500 hover:text-black"
                     >
-                      <svg 
-                          xmlns="http://www.w3.org/2000/svg" 
-                          fill="none" 
-                          viewBox="0 0 24 24" 
-                          stroke-width={2.5} 
-                          stroke="currentColor" 
-                          className="w-5 h-5"
-                        >
-                          <path 
-                            stroke-linecap="round" 
-                            stroke-linejoin="round" 
-                            d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" 
-                          />
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width={2.5}
+                        stroke="currentColor"
+                        className="w-5 h-5"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                        />
                       </svg>
                     </button>
                   </div>
@@ -351,18 +341,18 @@ export default function Home() {
                           onClick={() => handleDeleteLecturer(index)}
                           className="text-red-600 hover:text-red-800"
                         >
-                          <svg 
-                            xmlns="http://www.w3.org/2000/svg" 
-                            fill="none" 
-                            viewBox="0 0 24 24" 
-                            stroke-width={2.5} 
-                            stroke="currentColor" 
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke-width={2.5}
+                            stroke="currentColor"
                             className="w-5 h-5"
                           >
-                            <path 
-                              stroke-linecap="round" 
-                              stroke-linejoin="round" 
-                              d="M15 12H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" 
+                            <path
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              d="M15 12H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
                             />
                           </svg>
                         </button>
@@ -405,19 +395,19 @@ export default function Home() {
                       onClick={handleAddDeadline}
                       className="flex items-center text-blue-500 hover:text-black"
                     >
-                      <svg 
-                          xmlns="http://www.w3.org/2000/svg" 
-                          fill="none" 
-                          viewBox="0 0 24 24" 
-                          stroke-width={2.5} 
-                          stroke="currentColor" 
-                          className="w-5 h-5"
-                        >
-                          <path 
-                            stroke-linecap="round" 
-                            stroke-linejoin="round" 
-                            d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" 
-                          />
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width={2.5}
+                        stroke="currentColor"
+                        className="w-5 h-5"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                        />
                       </svg>
                     </button>
                   </div>
@@ -430,22 +420,24 @@ export default function Home() {
                           onClick={() => handleDeleteDeadline(index)}
                           className="text-red-600 hover:text-red-800"
                         >
-                          <svg 
-                            xmlns="http://www.w3.org/2000/svg" 
-                            fill="none" 
-                            viewBox="0 0 24 24" 
-                            stroke-width={2.5} 
-                            stroke="currentColor" 
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke-width={2.5}
+                            stroke="currentColor"
                             className="w-5 h-5"
                           >
-                            <path 
-                              stroke-linecap="round" 
-                              stroke-linejoin="round" 
-                              d="M15 12H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" 
+                            <path
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              d="M15 12H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
                             />
                           </svg>
                         </button>
-                        <span>{dl.name}: {dl.date}</span>
+                        <span>
+                          {dl.name}: {dl.date}
+                        </span>
                       </li>
                     ))}
                   </ul>
@@ -504,7 +496,7 @@ export default function Home() {
                       focus:outline-none
                       focus:ring-2
                       focus:ring-blue-300"
-                    >
+                  >
                     {isEditMode ? 'Änderungen speichern' : 'Modul erstellen'}
                   </button>
                 </div>
@@ -517,7 +509,8 @@ export default function Home() {
                 Modul löschen
               </h2>
               <p className="text-medium text-gray-600 mb-6 text-center">
-                Sind Sie sicher, dass Sie dieses Modul löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.
+                Sind Sie sicher, dass Sie dieses Modul löschen möchten? Diese
+                Aktion kann nicht rückgängig gemacht werden.
               </p>
               <div className="flex justify-center gap-4">
                 <button

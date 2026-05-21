@@ -5,9 +5,10 @@ import { Header } from '../../components/Header/header';
 import { TaskList } from '../../components/Dashboard/taskList';
 import { StatCardList } from '../../components/Dashboard/statCardList';
 import { Modal } from '../../components/Modal/modal';
-import { Layout } from '../Layout';
+import { Layout } from '../../components/Layout';
 import { getModules, addModule } from '../../firebase/firebaseModulesService';
 import { getTasks } from '../../firebase/firebaseTasksService';
+import { Task } from '../../components/Tasks/types';
 
 type Module = {
   id?: string;
@@ -19,16 +20,8 @@ type Module = {
     lecturers: string[];
     deadlines: { name: string; date: string }[];
   };
- 
-};
-
-type Task = {
-  id: string;
-  title: string;
-  description?: string;
-  columnId: string;
-  moduleTitle?: string;
-  color?: string;
+  tasks?: Task[];
+  activeTasks?: Task[];
 };
 
 export default function Home() {
@@ -76,27 +69,35 @@ export default function Home() {
 
     const fetchData = async () => {
       try {
-       
-        const fetchedModules = await getModules(userId) as Module[];
+        const fetchedModules = (await getModules(userId)) as Module[];
 
-     
         const fetchedTasks = await getTasks(userId);
 
-      
         const modulesWithTasks = fetchedModules.map((mod: Module) => {
           const filteredTasks = (fetchedTasks as Task[]).filter(
             (task) => task.moduleTitle === mod.title
           );
+
+          const doneTasks = filteredTasks.filter(
+            (task) => task.columnId === 'done'
+          );
+
           return {
             ...mod,
+            tasksCount: filteredTasks.length,
+            progress:
+              filteredTasks.length > 0
+                ? Math.round((doneTasks.length / filteredTasks.length) * 100)
+                : 0,
             tasks: filteredTasks,
+            activeTasks: filteredTasks.filter(
+              (task) => task.columnId !== 'done'
+            ),
           };
         });
 
-        
         setModules(modulesWithTasks as Module[]);
 
-        
         const todo = (fetchedTasks as Task[]).filter(
           (t) => t.columnId != 'done'
         );
@@ -180,11 +181,11 @@ export default function Home() {
   };
 
   const handleDeleteLecturer = (index: number) => {
-    setLecturers((prevLecturers) => 
+    setLecturers((prevLecturers) =>
       prevLecturers.filter((_, i) => i !== index)
     );
   };
-  
+
   const handleDeleteDeadline = (index: number) => {
     setDeadlines((prevDeadlines) =>
       prevDeadlines.filter((_, i) => i !== index)
@@ -236,19 +237,19 @@ export default function Home() {
                     }}
                     className="flex items-center text-blue-500 hover:text-black"
                   >
-                    <svg 
-                        xmlns="http://www.w3.org/2000/svg" 
-                        fill="none" 
-                        viewBox="0 0 24 24" 
-                        stroke-width={2.5} 
-                        stroke="currentColor" 
-                        className="w-5 h-5"
-                      >
-                        <path 
-                          stroke-linecap="round" 
-                          stroke-linejoin="round" 
-                          d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" 
-                        />
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke-width={2.5}
+                      stroke="currentColor"
+                      className="w-5 h-5"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                      />
                     </svg>
                   </button>
                 </div>
@@ -261,18 +262,18 @@ export default function Home() {
                         onClick={() => handleDeleteLecturer(index)}
                         className="text-red-600 hover:text-red-800"
                       >
-                        <svg 
-                          xmlns="http://www.w3.org/2000/svg" 
-                          fill="none" 
-                          viewBox="0 0 24 24" 
-                          stroke-width={2.5} 
-                          stroke="currentColor" 
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke-width={2.5}
+                          stroke="currentColor"
                           className="w-5 h-5"
                         >
-                          <path 
-                            stroke-linecap="round" 
-                            stroke-linejoin="round" 
-                            d="M15 12H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" 
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M15 12H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
                           />
                         </svg>
                       </button>
@@ -314,24 +315,24 @@ export default function Home() {
                     }}
                     className="flex items-center text-blue-500 hover:text-black"
                   >
-                    <svg 
-                        xmlns="http://www.w3.org/2000/svg" 
-                        fill="none" 
-                        viewBox="0 0 24 24" 
-                        stroke-width={2.5} 
-                        stroke="currentColor" 
-                        className="w-5 h-5"
-                      >
-                        <path 
-                          stroke-linecap="round" 
-                          stroke-linejoin="round" 
-                          d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" 
-                        />
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke-width={2.5}
+                      stroke="currentColor"
+                      className="w-5 h-5"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                      />
                     </svg>
                   </button>
                 </div>
                 <ul className="list-disc list-inside mt-2 text-sm text-gray-700">
-                {deadlines.map((dl, index) => (
+                  {deadlines.map((dl, index) => (
                     <li key={index} className="flex items-center gap-2">
                       {/* Delete Button */}
                       <button
@@ -339,22 +340,24 @@ export default function Home() {
                         onClick={() => handleDeleteDeadline(index)}
                         className="text-red-600 hover:text-red-800"
                       >
-                        <svg 
-                          xmlns="http://www.w3.org/2000/svg" 
-                          fill="none" 
-                          viewBox="0 0 24 24" 
-                          stroke-width={2.5} 
-                          stroke="currentColor" 
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke-width={2.5}
+                          stroke="currentColor"
                           className="w-5 h-5"
                         >
-                          <path 
-                            stroke-linecap="round" 
-                            stroke-linejoin="round" 
-                            d="M15 12H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" 
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M15 12H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
                           />
                         </svg>
                       </button>
-                      <span>{dl.name}: {dl.date}</span>
+                      <span>
+                        {dl.name}: {dl.date}
+                      </span>
                     </li>
                   ))}
                 </ul>
@@ -418,6 +421,8 @@ export default function Home() {
           <ModuleCardList
             moduleCards={modules.map((m) => ({
               ...m,
+              tasks: m.tasks ?? [],
+              activeTasks: m.activeTasks ?? [],
               //isClickable: false,
               onDelete: () => {},
             }))}

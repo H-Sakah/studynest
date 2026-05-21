@@ -9,11 +9,25 @@ import {
   writeBatch,
 } from 'firebase/firestore';
 
+export type Task = {
+  id: string;
+  title: string;
+  description: string;
+  color: string;
+  columnId: string;
+  moduleTitle: string;
+  orderIndex: number;
+};
+
 // Tasks für den Benutzer abrufen
-export const getTasks = async (userId: string) => {
+export const getTasks = async (userId: string): Promise<Task[]> => {
   const tasksCollection = collection(db, `users/${userId}/tasks`);
   const snapshot = await getDocs(tasksCollection);
-  return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+
+  return snapshot.docs.map((doc) => ({
+    id: doc.id,
+    ...(doc.data() as Omit<Task, 'id'>),
+  }));
 };
 
 // Task hinzufügen
@@ -25,7 +39,7 @@ export const addTask = async (
     color: string;
     columnId: string;
     moduleTitle: string;
-    orderIndex: number; 
+    orderIndex: number;
   }
 ) => {
   const tasksCollection = collection(db, `users/${userId}/tasks`);
