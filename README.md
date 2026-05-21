@@ -1,7 +1,7 @@
 # StudyNest
 
 StudyNest is a full-stack web application developed as part of a university Web Engineering module.  
-The project demonstrates a clean separation between frontend and backend, modern tooling, and practical authentication and data handling using Firebase.
+The project represents a student platform and demonstrates a clean separation between frontend and backend, modern tooling, authentication, and data handling using Firebase.
 
 ---
 
@@ -30,25 +30,28 @@ The project demonstrates a clean separation between frontend and backend, modern
 studynest/
 ├── frontend/   # Next.js frontend application
 ├── backend/    # Node.js / Express backend
+├── tests/      # Test setup
+└── README.md
 ```
 
 Both frontend and backend are independent npm projects and must be installed separately.
 
 ---
 
-## Installation & Local Development
+## Local Development
 
 ### Prerequisites
 
 - Node.js (version 18–20 recommended)
 - npm
+- Firebase project configuration
 
 ---
 
 ### 1. Clone the repository
 
 ```bash
-git clone <REPOSITORY_URL>
+git clone https://github.com/H-Sakah/studynest.git
 cd studynest
 ```
 
@@ -97,14 +100,11 @@ To run the backend with full functionality, a valid Firebase Admin configuration
 
 ## Security Note
 
-`npm audit` may report moderate vulnerabilities in dev-only dependencies (e.g. Vite, Vitest).  
-These do **not** affect production builds.
-
-The Vitest API server is explicitly disabled to mitigate known RCE vectors during development.
+Development-only dependency warnings may appear during `npm audit`. These do **not** affect production builds.
 
 ---
 
-## Authors
+## Contributors
 
 - Houssam Sakah
 - Ivan Misic
